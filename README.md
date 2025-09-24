@@ -18,33 +18,71 @@ You can install the development version of asi like so:
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+Install the package from GitHub and load it:
 
 ``` r
-# library(asi)
-## basic example code
+# install.packages("devtools")
+devtools::install_github("pachadotdev/asi")
 ```
-
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
 
 ``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
+library(asi)
 ```
 
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date. `devtools::build_readme()` is handy for this.
+Because of the datasets size, the package provides a function to
+download the datasets and create a local DuckDB database. This results
+in a CRAN-compliant package.
 
-You can also embed plots, for example:
+Here is how to get the ASI database ready for use:
 
-<img src="man/figures/README-pressure-1.png" width="100%" />
+``` r
+asi_download()
+```
 
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub and CRAN.
+Check the average day of manufacturing days per industry type (See
+<https://microdata.gov.in/NADA/index.php/catalog/205/data-dictionary/F35?file_name=blkA202223>):
+
+``` r
+library(dplyr)
+#> 
+#> Attaching package: 'dplyr'
+#> The following objects are masked from 'package:stats':
+#> 
+#>     filter, lag
+#> The following objects are masked from 'package:base':
+#> 
+#>     intersect, setdiff, setequal, union
+library(duckdb)
+#> Loading required package: DBI
+
+con <- dbConnect(duckdb(), asi_file_path())
+
+dbListTables(con)
+#>  [1] "2019-20-blkA" "2019-20-blkB" "2019-20-blkC" "2019-20-blkD" "2019-20-blkE"
+#>  [6] "2019-20-blkF" "2019-20-blkG" "2019-20-blkH" "2019-20-blkI" "2019-20-blkJ"
+#> [11] "2020-21-blkA" "2020-21-blkB" "2020-21-blkC" "2020-21-blkD" "2020-21-blkE"
+#> [16] "2020-21-blkF" "2020-21-blkG" "2020-21-blkH" "2020-21-blkI" "2020-21-blkJ"
+#> [21] "2021-22-blkA" "2021-22-blkB" "2021-22-blkC" "2021-22-blkD" "2021-22-blkE"
+#> [26] "2021-22-blkF" "2021-22-blkG" "2021-22-blkH" "2021-22-blkI" "2021-22-blkJ"
+#> [31] "2022-23-blkA" "2022-23-blkB" "2022-23-blkC" "2022-23-blkD" "2022-23-blkE"
+#> [36] "2022-23-blkF" "2022-23-blkG" "2022-23-blkH" "2022-23-blkI" "2022-23-blkJ"
+
+tbl(con, "2019-20-blkA") %>%
+  group_by(a9) %>%
+  mutate(
+    a9chr = case_when(
+      a9 == 1L ~ "Rural",
+      a9 == 2L ~ "Urban",
+      TRUE ~ as.character(NA)
+    )
+  ) %>%
+  summarise(mwdays = mean(mwdays, na.rm = TRUE)) %>%
+  collect()
+#> # A tibble: 2 × 2
+#>      a9 mwdays
+#>   <dbl>  <dbl>
+#> 1     2   233.
+#> 2     1   226.
+
+dbDisconnect(con, shutdown = TRUE)
+```

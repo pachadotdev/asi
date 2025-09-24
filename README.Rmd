@@ -1,0 +1,76 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# asi
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of asi is to ...
+
+## Installation
+
+You can install the development version of asi like so:
+
+``` r
+# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
+```
+
+## Example
+
+Install the package from GitHub and load it:
+
+```{r install, eval=FALSE}
+# install.packages("devtools")
+devtools::install_github("pachadotdev/asi")
+```
+
+```{r load}
+library(asi)
+```
+
+Because of the datasets size, the package provides a function to download the datasets and create a local DuckDB
+database. This results in a CRAN-compliant package.
+
+Here is how to get the ASI database ready for use:
+
+```{r download, eval=FALSE}
+asi_download()
+```
+
+Check the average day of manufacturing days per industry type (See https://microdata.gov.in/NADA/index.php/catalog/205/data-dictionary/F35?file_name=blkA202223):
+
+```{r avg_mfg_days}
+library(dplyr)
+library(duckdb)
+
+con <- dbConnect(duckdb(), asi_file_path())
+
+dbListTables(con)
+
+tbl(con, "2019-20-blkA") %>%
+  group_by(a9) %>%
+  mutate(
+    a9chr = case_when(
+      a9 == 1L ~ "Rural",
+      a9 == 2L ~ "Urban",
+      TRUE ~ as.character(NA)
+    )
+  ) %>%
+  summarise(mwdays = mean(mwdays, na.rm = TRUE)) %>%
+  collect()
+
+dbDisconnect(con, shutdown = TRUE)
+```
