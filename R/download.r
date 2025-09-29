@@ -4,7 +4,7 @@
 #' datasets cannot be included in the package due to their size and CRAN file size limits.
 #'
 #' @param ver Which version to download. By default it is the latest version available on GitHub. You can see all
-#' versions at <https://github.com/pachadotdev/asi/releases>.
+#' versions at <https://github.com/rahulsh97/asi/releases>.
 #'
 #' @return NULL
 #' @export
@@ -33,7 +33,7 @@ asi_download <- function(ver = NULL) {
   
   suppressWarnings(try(dir.create(dir, recursive = TRUE)))
   
-  rfile <- get_gh_release_file("pachadotdev/asi", tag_name = ver, dir = destdir)
+  rfile <- get_gh_release_file("rahulsh97/asi", tag_name = ver, dir = destdir)
  
   msg("Delete old versions of the database if any...\n")
   asi_delete(ask = FALSE)
