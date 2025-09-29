@@ -4,6 +4,7 @@
 # asi
 
 <!-- badges: start -->
+
 <!-- badges: end -->
 
 The goal of asi is to …
@@ -22,7 +23,7 @@ Install the package from GitHub and load it:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("pachadotdev/asi")
+devtools::install_github("rahulsh97/asi")
 ```
 
 ``` r
@@ -53,6 +54,7 @@ library(dplyr)
 #> 
 #>     intersect, setdiff, setequal, union
 library(duckdb)
+#> Warning: package 'duckdb' was built under R version 4.5.1
 #> Loading required package: DBI
 
 con <- dbConnect(duckdb(), asi_file_path())
@@ -81,8 +83,8 @@ tbl(con, "2019-20-blkA") %>%
 #> # A tibble: 2 × 2
 #>      a9 mwdays
 #>   <dbl>  <dbl>
-#> 1     2   233.
-#> 2     1   226.
+#> 1     1   226.
+#> 2     2   233.
 
 dbDisconnect(con, shutdown = TRUE)
 ```

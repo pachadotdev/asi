@@ -34,7 +34,7 @@ Install the package from GitHub and load it:
 
 ```{r install, eval=FALSE}
 # install.packages("devtools")
-devtools::install_github("pachadotdev/asi")
+devtools::install_github("rahulsh97/asi")
 ```
 
 ```{r load}
