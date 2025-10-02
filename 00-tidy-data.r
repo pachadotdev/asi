@@ -1,11 +1,12 @@
 library(haven)
+library(janitor)
 library(purrr)
 library(xml2)
 library(usethis)
 
 use_cc0_license()
 
-obs <- paste0("data-raw/", c("201516", "201819", "201920", "202021", "202122", "202223"))
+obs <- paste0("data-raw/", c("201516", "201617", "201819", "201920", "202021", "202122", "202223"))
 
 # remove extra whitespace from list elements and from character attributes
 # e.g. $citation$prodStmt$producer[[1]] == "\n  Industrial Statistics Wing\n"
@@ -132,6 +133,7 @@ try(dir.create("data-tidy"))
 map(
   obs,
   function(x) {
+    message("===============================")
     message(x)
     # x = obs[1]
 
@@ -143,33 +145,40 @@ map(
       return(FALSE)
     }
 
-    savs <- list.files(x, pattern = "\\.sav$", full.names = TRUE, recursive = TRUE)
+    savs <- sort(list.files(x, pattern = "\\.sav$", full.names = TRUE, recursive = TRUE))
+
+    # move files with "rectified" in name to end of list
+    savs <- c(savs[!grepl("rectified", savs)], savs[grepl("rectified", savs)])
 
     d <- map(
       savs,
       function(y) {
         # y = savs[1]
-        read_sav(y)
+        clean_names(read_sav(y))
       }
     )
-
-    # TODO: rename columns before 2018-19 to match later years
-
-    # see names in 2022-23
-    # > colnames(d$data$blkA)
-    # [1] "yr"       "blk"      "a1"       "a2"       "a3"       "a4"      
-    # [7] "a5"       "a7"       "a8"       "a9"       "a10"      "a11"     
-    # [13] "a12"      "bonus"    "pf"       "welfare"  "mwdays"   "nwdays"  
-    # [19] "wdays"    "costop"   "expshare" "mult" 
 
     names(d) <- map_chr(
       seq_along(d),
       function(z) {
         # z = 1
-        out <- try(paste0("blk", unique(d[[z]]$blk)))
-        if (inherits(out, "try-error")) {
-          # complete
+        
+        if (z == 1) {
+          print((colnames(d[[z]])))
         }
+
+        # First try "blk" column
+        if ("blk" %in% colnames(d[[z]])) {
+          return(paste0("blk", unique(d[[z]]$blk)))
+        }
+        
+        # If "blk" not found, try "block" column
+        if ("block" %in% colnames(d[[z]])) {
+          return(paste0("blk", unique(d[[z]]$block)))
+        }
+        
+        # If neither column exists, stop with informative error
+        stop("Cannot determine block name")
       }
     )
 
