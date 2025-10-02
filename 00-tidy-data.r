@@ -5,11 +5,7 @@ library(usethis)
 
 use_cc0_license()
 
-obs <- paste0("data-raw/", c("201920", "202021", "202122", "202223"))
-
-available_datasets <- c("2019-20", "2020-21", "2021-22", "2022-23")
-
-use_data(available_datasets, overwrite = TRUE)
+obs <- paste0("data-raw/", c("201516", "201819", "201920", "202021", "202122", "202223"))
 
 # remove extra whitespace from list elements and from character attributes
 # e.g. $citation$prodStmt$producer[[1]] == "\n  Industrial Statistics Wing\n"
@@ -136,6 +132,7 @@ try(dir.create("data-tidy"))
 map(
   obs,
   function(x) {
+    message(x)
     # x = obs[1]
 
     nm <- paste0("asi", sub("data-raw/", "", x))
@@ -156,11 +153,23 @@ map(
       }
     )
 
+    # TODO: rename columns before 2018-19 to match later years
+
+    # see names in 2022-23
+    # > colnames(d$data$blkA)
+    # [1] "yr"       "blk"      "a1"       "a2"       "a3"       "a4"      
+    # [7] "a5"       "a7"       "a8"       "a9"       "a10"      "a11"     
+    # [13] "a12"      "bonus"    "pf"       "welfare"  "mwdays"   "nwdays"  
+    # [19] "wdays"    "costop"   "expshare" "mult" 
+
     names(d) <- map_chr(
       seq_along(d),
       function(z) {
         # z = 1
-        paste0("blk", unique(d[[z]]$blk))
+        out <- try(paste0("blk", unique(d[[z]]$blk)))
+        if (inherits(out, "try-error")) {
+          # complete
+        }
       }
     )
 

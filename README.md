@@ -3,19 +3,8 @@
 
 # asi
 
-<!-- badges: start -->
-
-<!-- badges: end -->
-
-The goal of asi is to …
-
-## Installation
-
-You can install the development version of asi like so:
-
-``` r
-# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
-```
+The goal of asi is to provide a long dataset of the Annual Survey of
+Industries (ASI) from India.
 
 ## Example
 
@@ -88,3 +77,17 @@ tbl(con, "2019-20-blkA") %>%
 
 dbDisconnect(con, shutdown = TRUE)
 ```
+
+# Adding older/newer years
+
+1.  Install the Nesstar Explorer (e.g. ASI 2022-23 includes it)
+2.  Extract the RAR files downloaded from the microdata website to
+    data-raw/202223 or what year you are adding
+3.  Export the .Nesstar file to Stata (SAV) format with “Export
+    Datasets” and the metadata with “Export DDI” using the Nesstar
+    Explorer
+4.  Update `00-tidy-data.r` and run it
+5.  Update the available datasets in `R/available_datasets.R`
+6.  Update the new RDS files in the ‘Releases’ section of the GitHub
+    repository
+7.  Regenerate the database with `asi_delete()` and `asi_download()`
