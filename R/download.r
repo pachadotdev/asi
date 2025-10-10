@@ -43,7 +43,7 @@ asi_download <- function(ver = NULL) {
   try(dir.create(dir, recursive = TRUE))
   con <- DBI::dbConnect(duckdb::duckdb(), asi_file_path(dir), read_only = FALSE)
 
-  for (x in seq_along(finp_rds)) { 
+  for (x in seq_along(finp_rds)) {
     msg(sprintf("Importing %s ...", asi::available_datasets[x]))
     
     d <- readRDS(finp_rds[x])
@@ -59,11 +59,6 @@ asi_download <- function(ver = NULL) {
 
         # remove DB
         asi_delete(ask = FALSE)
-
-        # remove downloaded files
-        for (i in seq_along(finp_rds)) {
-          unlink(finp_rds[i])
-        }
 
         stop("It was not possible to create the table ", ntables[i], " in the database.")
       }
