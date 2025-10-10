@@ -38,7 +38,7 @@ asi_download <- function(ver = NULL) {
   msg("Delete old versions of the database if any...\n")
   asi_delete(ask = FALSE)
     
-  finp_rds <- list.files(destdir, full.names = TRUE, pattern = "\\.rds$")
+  finp_rds <- list.files(destdir, full.names = TRUE, pattern = "asi.*\\.rds$")
   
   try(dir.create(dir, recursive = TRUE))
   con <- DBI::dbConnect(duckdb::duckdb(), asi_file_path(dir), read_only = FALSE)
