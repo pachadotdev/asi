@@ -13,7 +13,7 @@
 #' \dontrun{ asi_download() }
 asi_download <- function(ver = NULL) {
   duckdb_version <- utils::packageVersion("duckdb")
-  db_pattern <- paste0("v", gsub("\\.", "", duckdb_version), ".sql$")
+  db_pattern <- paste0("asi_duckdb_v", gsub("\\.", "", duckdb_version), ".sql$")
   
   dir <- asi_path()
 
