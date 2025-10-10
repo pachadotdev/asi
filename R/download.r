@@ -19,9 +19,7 @@ asi_download <- function(ver = NULL) {
 
   duckdb_current_files <- list.files(dir, db_pattern, full.names = T)
   
-  if (length(duckdb_current_files) > 0 && 
-      # avoid listing initial empty duckdb files
-      all(file.size(duckdb_current_files) > 5000000000)) {
+  if (length(duckdb_current_files) > 0) {
     msg("There is already a census database for your DuckDB version.")
     msg("If you really want to download the database again, run asi_delete() and then download it again.")
     return(invisible())
