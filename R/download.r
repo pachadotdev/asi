@@ -41,9 +41,10 @@ asi_download <- function(ver = NULL) {
   finp_rds <- list.files(destdir, full.names = TRUE, pattern = "asi.*\\.rds$")
   
   try(dir.create(dir, recursive = TRUE))
-  con <- DBI::dbConnect(duckdb::duckdb(), asi_file_path(dir), read_only = FALSE)
 
   for (x in seq_along(finp_rds)) {
+    con <- DBI::dbConnect(duckdb::duckdb(), dbdir = asi_file_path(dir), read_only = FALSE)
+
     msg(sprintf("Importing %s ...", asi::available_datasets[x]))
     
     d <- readRDS(finp_rds[x])
@@ -62,13 +63,13 @@ asi_download <- function(ver = NULL) {
 
         stop("It was not possible to create the table ", ntables[i], " in the database.")
       }
+
+      DBI::dbDisconnect(con, shutdown = TRUE)
     }
 
     unlink(finp_rds[x])
     invisible(gc())
   }
-
-  DBI::dbDisconnect(con, shutdown = TRUE)
 }
 
 #' Descarga los archivos tsv/shp desde GitHub
