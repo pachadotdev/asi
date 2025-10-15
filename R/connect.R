@@ -1,3 +1,4 @@
+#' @keywords internal
 asi_path <- function() {
   sys_asi_path <- Sys.getenv("ASI_PATH")
   sys_asi_path <- gsub("\\\\", "/", sys_asi_path)

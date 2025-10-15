@@ -8,7 +8,7 @@ asi_download(ver = NULL)
 }
 \arguments{
 \item{ver}{Which version to download. By default it is the latest version available on GitHub. You can see all
-versions at \url{https://github.com/pachadotdev/asi/releases}.}
+versions at \url{https://github.com/rahulsh97/asi/releases}.}
 }
 \description{
 This function downloads the database from GitHub and creates a local database (DuckDB) with the data. These

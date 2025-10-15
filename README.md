@@ -1,6 +1,10 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/rahulsh97/asi/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/rahulsh97/asi/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
+
 # asi
 
 The goal of asi is to provide a long dataset of the Annual Survey of
@@ -43,20 +47,27 @@ library(dplyr)
 #> 
 #>     intersect, setdiff, setequal, union
 library(duckdb)
-#> Warning: package 'duckdb' was built under R version 4.5.1
 #> Loading required package: DBI
 
 con <- dbConnect(duckdb(), asi_file_path())
 
 dbListTables(con)
-#>  [1] "2019-20-blkA" "2019-20-blkB" "2019-20-blkC" "2019-20-blkD" "2019-20-blkE"
-#>  [6] "2019-20-blkF" "2019-20-blkG" "2019-20-blkH" "2019-20-blkI" "2019-20-blkJ"
-#> [11] "2020-21-blkA" "2020-21-blkB" "2020-21-blkC" "2020-21-blkD" "2020-21-blkE"
-#> [16] "2020-21-blkF" "2020-21-blkG" "2020-21-blkH" "2020-21-blkI" "2020-21-blkJ"
-#> [21] "2021-22-blkA" "2021-22-blkB" "2021-22-blkC" "2021-22-blkD" "2021-22-blkE"
-#> [26] "2021-22-blkF" "2021-22-blkG" "2021-22-blkH" "2021-22-blkI" "2021-22-blkJ"
-#> [31] "2022-23-blkA" "2022-23-blkB" "2022-23-blkC" "2022-23-blkD" "2022-23-blkE"
-#> [36] "2022-23-blkF" "2022-23-blkG" "2022-23-blkH" "2022-23-blkI" "2022-23-blkJ"
+#>  [1] "2015-16-blkA" "2015-16-blkB" "2015-16-blkC" "2015-16-blkD" "2015-16-blkE"
+#>  [6] "2015-16-blkF" "2015-16-blkG" "2015-16-blkH" "2015-16-blkI" "2015-16-blkJ"
+#> [11] "2016-17-blkA" "2016-17-blkB" "2016-17-blkC" "2016-17-blkD" "2016-17-blkE"
+#> [16] "2016-17-blkF" "2016-17-blkG" "2016-17-blkH" "2016-17-blkI" "2016-17-blkJ"
+#> [21] "2017-18-blkA" "2017-18-blkB" "2017-18-blkC" "2017-18-blkD" "2017-18-blkE"
+#> [26] "2017-18-blkF" "2017-18-blkG" "2017-18-blkH" "2017-18-blkI" "2017-18-blkJ"
+#> [31] "2018-19-blkA" "2018-19-blkB" "2018-19-blkC" "2018-19-blkD" "2018-19-blkE"
+#> [36] "2018-19-blkF" "2018-19-blkG" "2018-19-blkH" "2018-19-blkI" "2018-19-blkJ"
+#> [41] "2019-20-blkA" "2019-20-blkB" "2019-20-blkC" "2019-20-blkD" "2019-20-blkE"
+#> [46] "2019-20-blkF" "2019-20-blkG" "2019-20-blkH" "2019-20-blkI" "2019-20-blkJ"
+#> [51] "2020-21-blkA" "2020-21-blkB" "2020-21-blkC" "2020-21-blkD" "2020-21-blkE"
+#> [56] "2020-21-blkF" "2020-21-blkG" "2020-21-blkH" "2020-21-blkI" "2020-21-blkJ"
+#> [61] "2021-22-blkA" "2021-22-blkB" "2021-22-blkC" "2021-22-blkD" "2021-22-blkE"
+#> [66] "2021-22-blkF" "2021-22-blkG" "2021-22-blkH" "2021-22-blkI" "2021-22-blkJ"
+#> [71] "2022-23-blkA" "2022-23-blkB" "2022-23-blkC" "2022-23-blkD" "2022-23-blkE"
+#> [76] "2022-23-blkF" "2022-23-blkG" "2022-23-blkH" "2022-23-blkI" "2022-23-blkJ"
 
 tbl(con, "2019-20-blkA") %>%
   group_by(a9) %>%
@@ -72,8 +83,8 @@ tbl(con, "2019-20-blkA") %>%
 #> # A tibble: 2 × 2
 #>      a9 mwdays
 #>   <dbl>  <dbl>
-#> 1     1   226.
-#> 2     2   233.
+#> 1     2   233.
+#> 2     1   226.
 
 dbDisconnect(con, shutdown = TRUE)
 ```

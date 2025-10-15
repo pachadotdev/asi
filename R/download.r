@@ -41,8 +41,6 @@ asi_download <- function(ver = NULL) {
   try(dir.create(dir, recursive = TRUE))
 
   for (x in seq_along(finp_rds)) {
-    con <- DBI::dbConnect(duckdb::duckdb(), dbdir = asi_file_path(dir), read_only = FALSE)
-
     msg(sprintf("Importing %s ...", asi::available_datasets[x]))
     
     d <- readRDS(finp_rds[x])
@@ -50,6 +48,8 @@ asi_download <- function(ver = NULL) {
     ntables <-  paste0(asi::available_datasets[x], "-", names(d$data))
 
     for (i in seq_along(d$data)) {
+      con <- DBI::dbConnect(duckdb::duckdb(), dbdir = asi_file_path(dir), read_only = FALSE)
+      
       copy <- try(DBI::dbWriteTable(con, ntables[i],
         as.data.frame(d$data[[i]]), overwrite = FALSE, append = TRUE))
 
@@ -70,8 +70,8 @@ asi_download <- function(ver = NULL) {
   }
 }
 
-#' Descarga los archivos tsv/shp desde GitHub
 #' @noRd
+#' @keywords internal
 get_gh_release_file <- function(repo, tag_name = NULL, dir = tempdir(),
                                 overwrite = TRUE) {
   releases <- httr::GET(
