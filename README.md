@@ -5,7 +5,7 @@
 [![R-CMD-check](https://github.com/rahulsh97/asi/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/rahulsh97/asi/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-# asi
+# Annual Survey of Industries (ASI)
 
 The goal of asi is to provide a long dataset of the Annual Survey of
 Industries (ASI) from India.

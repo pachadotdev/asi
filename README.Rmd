@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# asi
+# Annual Survey of Industries (ASI)
 
 The goal of asi is to provide a long dataset of the Annual Survey of Industries (ASI) from India.
 
